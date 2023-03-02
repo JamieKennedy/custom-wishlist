@@ -9,7 +9,11 @@ namespace API
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Logger
             builder.Services.ConfigureLoggerService();
+
+            // Db Context
+            builder.Services.ConfigureSqlContext(builder.Configuration);
 
             builder.Services.AddControllers();
 
