@@ -15,6 +15,9 @@ namespace API
             // Db Context
             builder.Services.ConfigureSqlContext(builder.Configuration);
 
+            // Managers
+            builder.Services.ConfigureRepositoryManager();
+
             builder.Services.AddControllers();
 
             builder.Services.AddEndpointsApiExplorer();

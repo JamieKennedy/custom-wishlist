@@ -3,6 +3,10 @@
 using Microsoft.EntityFrameworkCore;
 
 using Repository;
+using Repository.Contracts;
+
+using Service;
+using Service.Contracts;
 
 using System.Data.SqlClient;
 
@@ -24,6 +28,16 @@ namespace API.Extensions
                 options.UseSqlServer(connectionString,
                                      b => b.MigrationsAssembly("API"));
             });
+        }
+
+        public static void ConfigureRepositoryManager(this IServiceCollection services)
+        {
+            services.AddScoped<IRepositoryManager, RepositoryManager>();
+        }
+
+        public static void ConfigureServiceManager(this IServiceCollection services)
+        {
+            services.AddScoped<IServiceManager, ServiceManager>();
         }
     }
 }
