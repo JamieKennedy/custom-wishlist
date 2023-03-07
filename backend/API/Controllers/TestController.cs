@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -6,6 +7,7 @@ namespace API.Controllers
     [ApiController]
     public class TestController : ControllerBase
     {
+        [Authorize]
         [HttpGet()]
         public Task<IActionResult> Get()
         {

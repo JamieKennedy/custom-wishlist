@@ -29,5 +29,18 @@ namespace API.Controllers
 
             return BadRequest(ModelState);
         }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Authenticate([FromBody] UserAuthenticationDto userAuthenticationDto)
+        {
+            if (!await _serviceManager.AuthenticationService.AuthenticateUser(userAuthenticationDto))
+            {
+                return Unauthorized();
+            }
+
+            var token = await _serviceManager.AuthenticationService.CreateToken();
+
+            return Ok(new { Token = token });
+        }
     }
 }
