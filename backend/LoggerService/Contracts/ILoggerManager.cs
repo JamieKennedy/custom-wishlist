@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LoggerService.Contracts
+﻿namespace LoggerService.Contracts
 {
-    internal interface ILoggerManager
+    public interface ILoggerManager
     {
         void LogInfo(string message);
         void LogWarning(string message);

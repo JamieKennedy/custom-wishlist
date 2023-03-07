@@ -1,29 +1,28 @@
 ﻿using AutoMapper;
-
-using LoggerService;
-
+using Entities.Models.User;
+using LoggerService.Contracts;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-
 using Repository.Contracts;
-
 using Service.Contracts;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Service
 {
     public class ServiceManager : IServiceManager
     {
-        public ServiceManager(IRepositoryManager repositoryManager,
-                              LoggerManager loggerManager,
-                              IMapper mapper,
-                              IConfiguration configuration)
-        {
+        private readonly Lazy<IAuthenticationService> _authenticationService;
 
+        public ServiceManager(IRepositoryManager repositoryManager,
+                              ILoggerManager loggerManager,
+                              IMapper mapper,
+                              IConfiguration configuration,
+                              UserManager<User> userManager)
+        {
+            _authenticationService = new Lazy<IAuthenticationService>(
+                () => new AuthenticationService(loggerManager, mapper, userManager, configuration)
+            );
         }
+
+        public IAuthenticationService AuthenticationService => _authenticationService.Value;
     }
 }

@@ -1,20 +1,21 @@
-﻿using Entities.Models.Exceptions;
+﻿using Entities.Models.Error;
+using Entities.Models.Error.Exceptions;
 
 using LoggerService;
-
+using LoggerService.Contracts;
 using Microsoft.AspNetCore.Diagnostics;
-
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace API.Middleware
 {
     public static class ExceptionMiddleware
     {
-        public static void ConfigureExceptionHandler(this IApplicationBuilder builder, LoggerManager logger)
+        public static void ConfigureExceptionHandler(this IApplicationBuilder builder, ILoggerManager logger)
         {
-            builder.UseExceptionHandler(error =>
+            builder.UseExceptionHandler(app =>
             {
-                error.Run(async context =>
+                app.Run(async context =>
                 {
                     context.Response.ContentType = "application/json";
 
@@ -45,6 +46,7 @@ namespace API.Middleware
         {
             return error switch
             {
+                BadRequestException => BadRequestException.StatusCode,
                 _ => StatusCodes.Status500InternalServerError
             };
         }
