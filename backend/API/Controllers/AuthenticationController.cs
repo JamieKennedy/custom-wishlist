@@ -38,9 +38,9 @@ namespace API.Controllers
                 return Unauthorized();
             }
 
-            var token = await _serviceManager.AuthenticationService.CreateToken();
+            var tokenDto = await _serviceManager.AuthenticationService.CreateToken(true);
 
-            return Ok(new { Token = token });
+            return Ok(tokenDto);
         }
     }
 }

@@ -11,6 +11,8 @@ namespace Entities
             CreateMap<UserRegistrationDto, User>()
                 .ForMember(user => user.UserName,
                     opt => opt.MapFrom(userRegistrationDto => userRegistrationDto.Email));
+
+            CreateMap<User, UserDto>();
         }
 
         public static IMapper CreateMapper()
