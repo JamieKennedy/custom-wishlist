@@ -1,5 +1,7 @@
 import { FunctionComponent, useState } from "react";
 
+import { IAppContext } from "../../Data/Types/AppState";
+import { useAppState } from "../../State/AppState";
 import Modal from "./Modal";
 
 const Footer: FunctionComponent = () => {
