@@ -57,7 +57,7 @@ const LoginForm = () => {
                 </div>
 
                 <div>
-                    <FormSubmitButton defaultStateText='Log In' enabled={formState === FormState.default} formState={formState} />
+                    <FormSubmitButton defaultStateText='Log In' formState={formState} />
                     <p className='cursor-pointer text-center text-white'>
                         <a className='underline'>Create an account</a> | <a className='underline'>Forgotten password</a>
                     </p>

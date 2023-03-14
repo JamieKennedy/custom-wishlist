@@ -11,7 +11,7 @@ interface IFormSubmitProps {
 }
 
 const FormSubmit = ({ defaultStateText, enabled = true, formState, className, children }: IFormSubmitProps) => {
-    const disabled: boolean = !enabled || formState != FormState.default;
+    const disabled: boolean = !enabled || formState !== FormState.default;
 
     const buttonElement = (): JSX.Element => {
         switch (formState) {
@@ -28,7 +28,7 @@ const FormSubmit = ({ defaultStateText, enabled = true, formState, className, ch
         }
     };
 
-    const borderClass: string = enabled ? "border-white" : "border-gray-400";
+    const borderClass: string = disabled ? "border-gray-400" : "border-white";
 
     return (
         <button
