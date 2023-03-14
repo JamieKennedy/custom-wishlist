@@ -1,8 +1,5 @@
-import { FunctionComponent, ReactNode, useState } from "react";
-
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Form } from "react-router-dom";
-import { SpinnerCircular } from "spinners-react";
 import FormErrorMessage from "../../../Components/UI/FormErrorMessage";
 import FormSubmitButton from "../../../Components/UI/FormSubmitButton";
 import { FormState } from "../../../Data/Types/FormState";
@@ -21,22 +18,14 @@ const LoginForm = () => {
     } = useForm<ILoginFormData>();
 
     const [formState, setFormState] = useState<FormState>(FormState.default);
-    const buttonElement = (): JSX.Element => {
-        switch (formState) {
-            case FormState.default:
-                return <p>Log In</p>;
-            case FormState.pending:
-                return (
-                    <div className='w-full'>
-                        <SpinnerCircular color='#ffffff' secondaryColor='#747a7a' thickness={300} size={20} style={{ margin: "auto" }} />
-                    </div>
-                );
-            default:
-                return <p>Log In</p>;
-        }
-    };
 
-    const onSubmit = (data: ILoginFormData) => {};
+    const onSubmit = (data: ILoginFormData) => {
+        setFormState(FormState.pending);
+
+        setTimeout(() => {
+            setFormState(FormState.default);
+        }, 2000);
+    };
 
     return (
         <div className='flex h-[30rem] w-full flex-col items-center py-10'>
@@ -68,12 +57,7 @@ const LoginForm = () => {
                 </div>
 
                 <div>
-                    <FormSubmitButton
-                        enabled={formState === FormState.default}
-                        className='mx-auto mb-5 block h-8 w-2/3 cursor-pointer rounded-md border border-white text-white'
-                    >
-                        {buttonElement()}
-                    </FormSubmitButton>
+                    <FormSubmitButton defaultStateText='Log In' enabled={formState === FormState.default} formState={formState} />
                     <p className='cursor-pointer text-center text-white'>
                         <a className='underline'>Create an account</a> | <a className='underline'>Forgotten password</a>
                     </p>
