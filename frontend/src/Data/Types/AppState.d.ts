@@ -1,4 +1,5 @@
-export interface IAppState {}
-
-export type IAppContext =
-    | [appState: IAppState, updateAppState: (newState: IAppState) => void];
+export interface IAppState {
+    api: {
+        baseUrl: string;
+    };
+}

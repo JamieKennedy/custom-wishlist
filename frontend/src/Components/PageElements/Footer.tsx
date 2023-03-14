@@ -1,7 +1,5 @@
 import { FunctionComponent, useState } from "react";
 
-import { IAppContext } from "../../Data/Types/AppState";
-import { useAppState } from "../../State/AppState";
 import Modal from "./Modal";
 
 const Footer: FunctionComponent = () => {
@@ -12,21 +10,16 @@ const Footer: FunctionComponent = () => {
     };
 
     return (
-        <footer className="absolute bottom-5 left-5">
-            <p className=" text-white">
-                © Jamie Kennedy |{" "}
-                <button onClick={() => setModalVisibility(!showModal)}>
-                    Credits
-                </button>
+        <footer className='absolute bottom-5 left-5'>
+            <p className=' text-white'>
+                © Jamie Kennedy | <button onClick={() => setModalVisibility(!showModal)}>Credits</button>
             </p>
             {showModal ? (
                 <Modal onClose={() => setModalVisibility(false)}>
-                    <p className="py-5 pl-10 text-xl text-white underline">
-                        Credits
-                    </p>
-                    <p className="pb-5 pl-10 text-white">
+                    <p className='py-5 pl-10 text-xl text-white underline'>Credits</p>
+                    <p className='pb-5 pl-10 text-white'>
                         Free SVG Background by{" "}
-                        <a target="_blank" href="https://bgjar.com">
+                        <a target='_blank' href='https://bgjar.com'>
                             BGJar
                         </a>
                     </p>
