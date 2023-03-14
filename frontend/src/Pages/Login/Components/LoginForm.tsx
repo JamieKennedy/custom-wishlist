@@ -36,9 +36,7 @@ const LoginForm = () => {
         }
     };
 
-    const onSubmit = (data: ILoginFormData) => {
-        console.log(errors);
-    };
+    const onSubmit = (data: ILoginFormData) => {};
 
     return (
         <div className='flex h-[30rem] w-full flex-col items-center py-10'>
