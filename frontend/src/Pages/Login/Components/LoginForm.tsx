@@ -19,12 +19,12 @@ const LoginForm = () => {
 
     const [formState, setFormState] = useState<FormState>(FormState.default);
 
-    const onSubmit = (data: ILoginFormData) => {
+    const onSubmit = async (data: ILoginFormData) => {
         setFormState(FormState.pending);
 
-        setTimeout(() => {
-            setFormState(FormState.default);
-        }, 2000);
+        // TODO: Implement login api call
+
+        setFormState(FormState.default);
     };
 
     return (
