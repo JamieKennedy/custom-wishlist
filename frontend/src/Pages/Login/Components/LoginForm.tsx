@@ -22,7 +22,7 @@ const LoginForm = () => {
     const onSubmit = async (data: ILoginFormData) => {
         setFormState(FormState.pending);
 
-        // TODO: Implement login api call.
+        // TODO: Implement login api call
 
         setFormState(FormState.default);
     };
