@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
 import FormErrorMessage from "../../../Components/UI/FormErrorMessage";
-import FormSubmitButton from "../../../Components/UI/FormSubmitButton";
 import { FormState } from "../../../Data/Types/FormState";
+import FormSubmitButton from "../../../Components/UI/FormSubmitButton";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
 
 interface ILoginFormData {
     email: string;
@@ -59,7 +59,7 @@ const LoginForm = () => {
                 <div>
                     <FormSubmitButton defaultStateText='Log In' formState={formState} />
                     <p className='cursor-pointer text-center text-white'>
-                        <a className='underline'>Create an account</a> | <a className='underline'>Forgotten password</a>
+                        <a className='hover:underline'>Create an account</a> | <a className='hover:underline'>Forgotten password</a>
                     </p>
                 </div>
             </form>
