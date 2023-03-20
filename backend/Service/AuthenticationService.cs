@@ -139,7 +139,8 @@ namespace Service
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, _user.Email),
+                new ("Id", _user.Id),
+                new ("Email", _user.Email),
             };
 
             return claims;

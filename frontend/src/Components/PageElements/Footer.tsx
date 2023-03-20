@@ -12,7 +12,11 @@ const Footer: FunctionComponent = () => {
     return (
         <footer className='absolute bottom-5 left-5'>
             <p className=' text-white'>
-                © Jamie Kennedy | <button onClick={() => setModalVisibility(!showModal)}>Credits</button>
+                © Jamie Kennedy |{" "}
+                <a href='https://github.com/JamieKennedy/custom-wishlist' target='_blank'>
+                    GitHub
+                </a>{" "}
+                | <button onClick={() => setModalVisibility(!showModal)}>Credits</button>
             </p>
             {showModal ? (
                 <Modal onClose={() => setModalVisibility(false)}>

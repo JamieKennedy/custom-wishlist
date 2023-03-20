@@ -28,13 +28,13 @@ const FormSubmit = ({ defaultStateText, enabled = true, formState, className, ch
         }
     };
 
-    const borderClass: string = disabled ? "border-gray-400" : "border-white";
+    const stateEffectsClass: string = disabled ? "border-gray-400" : "border-white hover:scale-105";
 
     return (
         <button
             type='submit'
             disabled={disabled}
-            className={`${borderClass} mx-auto mb-5 block h-8 w-2/3 cursor-pointer rounded-md border border-white  text-white`}
+            className={`${stateEffectsClass} mx-auto block h-8 w-2/3 cursor-pointer rounded-md border text-white transition-transform duration-75 ease-in-out `}
         >
             {buttonElement()}
         </button>
