@@ -34,7 +34,7 @@ const FormSubmit = ({ defaultStateText, enabled = true, formState, className, ch
         <button
             type='submit'
             disabled={disabled}
-            className={`${stateEffectsClass} mx-auto mb-5 block h-8 w-2/3 cursor-pointer rounded-md border text-white transition-transform duration-75 ease-in-out `}
+            className={`${stateEffectsClass} mx-auto block h-8 w-2/3 cursor-pointer rounded-md border text-white transition-transform duration-75 ease-in-out `}
         >
             {buttonElement()}
         </button>

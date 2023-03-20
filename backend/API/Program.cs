@@ -1,4 +1,3 @@
-
 using System.Configuration;
 using API.Extensions;
 using API.Middleware;
@@ -17,6 +16,16 @@ namespace API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policyBuilder =>
+                {
+                    policyBuilder.AllowAnyOrigin()
+                                 .AllowAnyMethod()
+                                 .AllowAnyHeader();
+                });
+            });
 
             // Logger
             builder.Services.ConfigureLoggerService();
@@ -38,14 +47,14 @@ namespace API
 
             builder.Services.AddControllers();
 
+
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             // custom handling of invalid model state
             builder.Services.PostConfigure<ApiBehaviorOptions>(options =>
             {
-
-
                 options.InvalidModelStateResponseFactory = context =>
                 {
                     const int statusCode = StatusCodes.Status400BadRequest;
@@ -58,6 +67,8 @@ namespace API
                 };
             });
 
+            builder.Services.AddMvc();
+
             var app = builder.Build();
 
             var logger = app.Services.GetRequiredService<ILoggerManager>();
@@ -68,9 +79,12 @@ namespace API
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                app.UseCors("AllowAll");
             }
-
-            app.UseHttpsRedirection();
+            else
+            {
+                app.UseHttpsRedirection();
+            }
 
             app.UseAuthorization();
 
