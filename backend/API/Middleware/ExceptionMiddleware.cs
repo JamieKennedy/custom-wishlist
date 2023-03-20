@@ -47,6 +47,7 @@ namespace API.Middleware
             return error switch
             {
                 BadRequestException => BadRequestException.StatusCode,
+                UnauthorizedException => UnauthorizedException.StatusCode,
                 _ => StatusCodes.Status500InternalServerError
             };
         }

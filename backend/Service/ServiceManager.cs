@@ -20,7 +20,7 @@ namespace Service
                               UserManager<User> userManager)
         {
             _authenticationService = new Lazy<IAuthenticationService>(
-                () => new AuthenticationService(loggerManager, mapper, userManager, configuration)
+                () => new AuthenticationService(loggerManager, mapper, userManager, configuration, repositoryManager)
             );
 
             _userService = new Lazy<IUserService>(
