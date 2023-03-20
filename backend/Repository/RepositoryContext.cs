@@ -9,5 +9,7 @@ namespace Repository
     {
         public RepositoryContext(DbContextOptions options) : base(options) { }
 
+        public DbSet<Token>? Tokens { get; set; }
+
     }
 }
