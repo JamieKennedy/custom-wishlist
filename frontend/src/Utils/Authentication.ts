@@ -8,6 +8,12 @@ export const getPayload = (token: string): ITokenPayload => {
     return decoded;
 };
 
+export const accessTokenExpired = (token: string): boolean => {
+    const payload = getPayload(token);
+
+    return !(Date.now() / 1000 < payload.exp);
+};
+
 export const isLoggedIn = (appState: IAppState): boolean => {
     if (!appState.api.token) {
         // TODO: integrate with cookies and check for token there

@@ -9,7 +9,7 @@ namespace Service.Contracts
     {
         Task<IdentityResult> RegisterUser(UserRegistrationDto userRegistrationDto);
         Task<bool> AuthenticateUser(UserAuthenticationDto userAuthenticationDto);
-        Task<TokenDto> CreateToken(bool populateRefreshTokenExpiry);
+        TokenDto CreateToken(bool populateRefreshTokenExpiry);
         Task<TokenDto> RefreshToken(RefreshTokenDto refreshTokenDto, bool trackChanges);
     }
 }
