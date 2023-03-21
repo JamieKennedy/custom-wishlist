@@ -58,7 +58,7 @@ namespace Service
             return result;
         }
 
-        public async Task<TokenDto> CreateToken(bool populateRefreshTokenExpiry)
+        public TokenDto CreateToken(bool populateRefreshTokenExpiry)
         {
             var signingCredentials = GetSigningCredentials();
             var claims = GetClaims();
@@ -92,8 +92,11 @@ namespace Service
                 throw new RefreshTokenInvalidException("Inactive token");
             }
 
+            _user = await _userManager.FindByIdAsync(token.UserId);
+            token.User = _user;
+
             // Create new token
-            return await CreateToken(false);
+            return CreateToken(false);
         }
 
         private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)

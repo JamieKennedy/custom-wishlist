@@ -1,8 +1,8 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from "axios";
+import { getBearerToken, hasBearerToken } from "../Utils/HttpClientUtils";
 
 import { IErrorResponse } from "../Data/Types/API/ErrorResponse";
-
-// TODO: Type error's correctly
+import { accessTokenExpired } from "../Utils/Authentication";
 
 class HttpClient {
     private axiosInstance: AxiosInstance;
@@ -49,6 +49,10 @@ class HttpClient {
         }
     }
 
+    public addBearerToken = (token: string): void => {
+        this.axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    };
+
     private handleError = (error: any): IErrorResponse => {
         if (axios.isAxiosError(error)) {
             if (error.response) {
@@ -92,22 +96,18 @@ class HttpClient {
     };
 
     private onRequest = (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
-        console.debug(`[Request]: [${JSON.stringify(config)}]`);
         return config;
     };
 
     private onRequestError = (error: AxiosError): Promise<AxiosError> => {
-        //console.error(`[Request Error]: [${JSON.stringify(error)}]`);
         return Promise.reject(error);
     };
 
     private onResponse = (config: AxiosResponse): AxiosResponse => {
-        console.debug(`[Request]: [${JSON.stringify(config)}]`);
         return config;
     };
 
     private onResponseError = (error: AxiosError): Promise<AxiosError> => {
-        //console.error(`[Response Error]: [${JSON.stringify(error)}]`);
         return Promise.reject(error);
     };
 
