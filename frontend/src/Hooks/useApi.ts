@@ -1,8 +1,8 @@
+import axios, { AxiosRequestConfig } from "axios";
 import { IErrorResponse, isErrorResponse } from "../Data/Types/API/ErrorResponse";
 
 import { useAtom } from "jotai";
 import HttpClient from "../API/HttpClient";
-import { useHttpClient } from "../Providers/HttpClientProvider";
 import { AppStateAtom } from "../State/AppState";
 import { accessTokenExpired } from "../Utils/Authentication";
 import { useAuthentication } from "./useAuthentication";
@@ -11,15 +11,25 @@ import { useRefresh } from "./useRefresh";
 type fn = <T>(...args: any[]) => Promise<T | IErrorResponse>;
 
 export const useApi = () => {
-    const [appState, useAppState] = useAtom(AppStateAtom);
-    let httpClient = useHttpClient();
+    const [appState] = useAtom(AppStateAtom);
     const getClient = useAuthentication();
 
     const callApi = async <T, V>(
-        fn: (httpClient: HttpClient, data?: V) => Promise<T | IErrorResponse>,
+        fn: (httpClient: HttpClient, ...args: any[]) => Promise<T | IErrorResponse>,
         requiresAuth: boolean = false,
         data?: V
     ): Promise<T | IErrorResponse> => {
+        if (!appState.api.baseUrl) {
+            // No base url in the state, shouldn't happen
+            return {
+                statusCode: 404,
+                message: "No BaseUrl found",
+            };
+        }
+
+        // Initialise the request config
+        let requestConfig: AxiosRequestConfig = { baseURL: appState.api.baseUrl };
+
         if (requiresAuth) {
             const response = await getClient();
 
@@ -27,10 +37,16 @@ export const useApi = () => {
                 return response;
             }
 
-            httpClient = response;
+            requestConfig = { ...requestConfig, headers: { ...requestConfig.headers, Authorization: `Bearer ${response}` } };
         }
 
-        return await fn(httpClient, data);
+        const httpClient = new HttpClient(requestConfig);
+
+        if (data) {
+            return await fn(httpClient, data);
+        }
+
+        return await fn(httpClient);
     };
 
     return callApi;

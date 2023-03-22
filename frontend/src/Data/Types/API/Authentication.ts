@@ -3,6 +3,10 @@ export interface ILoginRequest {
     password: string;
 }
 
+export interface ITokenRefreshRequest {
+    refreshToken: string;
+}
+
 export interface IToken {
     accessToken: string;
     refreshToken: string;

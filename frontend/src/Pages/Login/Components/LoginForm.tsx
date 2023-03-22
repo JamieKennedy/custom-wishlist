@@ -12,7 +12,7 @@ import FormErrorMessage from "../../../Components/UI/FormErrorMessage";
 import FormSubmitButton from "../../../Components/UI/FormSubmitButton";
 import NavigationConst from "../../../Constants/NavigationConst";
 import { FormState } from "../../../Data/Types/FormState";
-import { useHttpClient } from "../../../Providers/HttpClientProvider";
+import { useApi } from "../../../Hooks/useApi";
 import { AppStateAtom } from "../../../State/AppState";
 
 interface ILoginFormData {
@@ -33,18 +33,15 @@ const LoginForm = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [appState, setAppState] = useAtom(AppStateAtom);
     const navigate = useNavigate();
-    const httpClient = useHttpClient();
+    const callApi = useApi();
 
     const onSubmit = async (data: ILoginFormData) => {
         setFormState(FormState.pending);
 
-        var response = await login(
-            {
-                email: data.email,
-                password: data.password,
-            },
-            httpClient
-        );
+        const response = await callApi(login, false, {
+            email: data.email,
+            password: data.password,
+        });
 
         if (isErrorResponse(response)) {
             // Default to an error occured message

@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from "axios";
-import { getBearerToken, hasBearerToken } from "../Utils/HttpClientUtils";
 
 import { IErrorResponse } from "../Data/Types/API/ErrorResponse";
 import { accessTokenExpired } from "../Utils/Authentication";
@@ -48,10 +47,6 @@ class HttpClient {
             return this.handleError(error);
         }
     }
-
-    public addBearerToken = (token: string): void => {
-        this.axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    };
 
     private handleError = (error: any): IErrorResponse => {
         if (axios.isAxiosError(error)) {

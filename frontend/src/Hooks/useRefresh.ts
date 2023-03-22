@@ -1,19 +1,20 @@
+import { IToken, ITokenRefreshRequest } from "../Data/Types/API/Authentication";
 import { IErrorResponse, isErrorResponse } from "../Data/Types/API/ErrorResponse";
 
 import { useAtom } from "jotai";
 import { refresh } from "../API/Authentication";
-import { IToken } from "../Data/Types/API/Authentication";
-import { IAppState } from "../Data/Types/AppState";
-import { useHttpClient } from "../Providers/HttpClientProvider";
+import HttpClient from "../API/HttpClient";
 import { AppStateAtom } from "../State/AppState";
 
 export const useRefresh = () => {
     const [appState, setAppState] = useAtom(AppStateAtom);
-    const client = useHttpClient();
 
     const refreshAccessToken = async (): Promise<IToken | IErrorResponse> => {
         if (appState.api.token && appState.api.token.refreshToken) {
-            const response = await refresh(appState.api.token.refreshToken, client);
+            const data: ITokenRefreshRequest = { refreshToken: appState.api.token.refreshToken };
+
+            const httpClient = new HttpClient({ baseURL: appState.api.baseUrl });
+            const response = await refresh(httpClient, data);
 
             if (!isErrorResponse(response)) {
                 // Update the app state
