@@ -7,7 +7,8 @@ import { getPayload, isLoggedIn } from "../../../Utils/Authentication";
 import { useAtom } from "jotai";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { login } from "../../../API/Authentication";
+import { Link } from "react-router-dom";
+import { Authentication } from "../../../API/Authentication";
 import FormErrorMessage from "../../../Components/UI/FormErrorMessage";
 import FormSubmitButton from "../../../Components/UI/FormSubmitButton";
 import NavigationConst from "../../../Constants/NavigationConst";
@@ -38,7 +39,7 @@ const LoginForm = () => {
     const onSubmit = async (data: ILoginFormData) => {
         setFormState(FormState.pending);
 
-        const response = await callApi(login, false, {
+        const response = await callApi(Authentication.login, false, {
             email: data.email,
             password: data.password,
         });
@@ -47,7 +48,7 @@ const LoginForm = () => {
             // Default to an error occured message
             let errorMessage = "An error has occured, please try again";
 
-            if (response.statusCode && response.statusCode === 401) {
+            if (response.StatusCode && response.StatusCode === 401) {
                 // if reponse is unauthorised, change error message to
                 // incorrect details
                 errorMessage = "Incorrect details";
@@ -58,8 +59,7 @@ const LoginForm = () => {
             return;
         }
 
-        appState.api.token = response as IToken;
-        setAppState(appState);
+        setAppState({ ...appState, api: { ...appState.api, accessToken: response } });
         setFormState(FormState.default);
 
         navigate(NavigationConst.Home);
@@ -122,7 +122,10 @@ const LoginForm = () => {
                         </div>
                     )}
                     <p className='cursor-pointer text-center text-white'>
-                        <a className='hover:underline'>Create an account</a> | <a className='hover:underline'>Forgotten password</a>
+                        <Link className='hover:underline' to={NavigationConst.CreateAccount}>
+                            Create an account
+                        </Link>{" "}
+                        | <a className='hover:underline'>Forgotten password</a>
                     </p>
                 </div>
             </form>

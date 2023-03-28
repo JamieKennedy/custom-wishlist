@@ -19,11 +19,13 @@ namespace API
 
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowAll", policyBuilder =>
+                options.AddPolicy("Localhost", policyBuilder =>
                 {
-                    policyBuilder.AllowAnyOrigin()
+                    policyBuilder.WithOrigins("http://localhost:5173")
                                  .AllowAnyMethod()
-                                 .AllowAnyHeader();
+                                 .AllowAnyHeader()
+                                 .AllowCredentials();
+
                 });
             });
 
@@ -79,7 +81,7 @@ namespace API
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-                app.UseCors("AllowAll");
+                app.UseCors("Localhost");
             }
             else
             {

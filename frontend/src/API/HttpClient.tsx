@@ -1,7 +1,6 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 
 import { IErrorResponse } from "../Data/Types/API/ErrorResponse";
-import { accessTokenExpired } from "../Utils/Authentication";
 
 class HttpClient {
     private axiosInstance: AxiosInstance;
@@ -55,8 +54,8 @@ class HttpClient {
                 if (error.response.status === 401) {
                     // 401 Unauthorised
                     return {
-                        statusCode: error.response.status,
-                        message: error.message,
+                        StatusCode: error.response.status,
+                        Message: error.message,
                     };
                 }
 
@@ -67,8 +66,8 @@ class HttpClient {
                     // Shouldn't really happen, passing null as status code so it can be checked
                     // in consumer
                     return {
-                        statusCode: null,
-                        message: error.message,
+                        StatusCode: null,
+                        Message: error.message,
                     };
                 }
             }
@@ -78,15 +77,15 @@ class HttpClient {
             // Error isn't an axios errror or server response
             // but has a message
             return {
-                statusCode: null,
-                message: error.message,
+                StatusCode: null,
+                Message: error.message,
             };
         }
 
         // Error has no error message
         return {
-            statusCode: null,
-            message: "An error has occured",
+            StatusCode: null,
+            Message: "An error has occured",
         };
     };
 

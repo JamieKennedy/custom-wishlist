@@ -3,10 +3,11 @@ import { Navigate, Outlet } from "react-router";
 import { IErrorResponse, isErrorResponse } from "../Data/Types/API/ErrorResponse";
 
 import { useAtom } from "jotai";
-import { refresh } from "../API/Authentication";
+import HttpClient from "../API/HttpClient";
 import NavigationConst from "../Constants/NavigationConst";
 import { IToken } from "../Data/Types/API/Authentication";
-import { useRefresh } from "../Hooks/useRefresh";
+import { useAuthentication } from "../Hooks/useAuthentication";
+import { useLogout } from "../Hooks/useLogout";
 import { AppStateAtom } from "../State/AppState";
 import { accessTokenExpired } from "../Utils/Authentication";
 
@@ -21,29 +22,32 @@ enum AuthState {
 }
 
 const Authenticate = () => {
-    const [authState, setAuthState] = useState<AuthState>(AuthState.Loading);
-    const [appState, setAppState] = useAtom(AppStateAtom);
-    const refreshAccessToken = useRefresh();
+    const [authState, setAuthState] = useState<AuthState>(AuthState.Success);
+    const [appState] = useAtom(AppStateAtom);
+
+    const getAccessToken = useAuthentication();
+    const logout = useLogout();
+
+    let didMount = false;
 
     useEffect(() => {
-        const refreshToken = async (): Promise<void> => {
-            const resposne = await refreshAccessToken();
-
-            if (isErrorResponse(resposne)) {
+        const refreshAccessToken = async (): Promise<void> => {
+            const accessToken = await getAccessToken();
+            if (isErrorResponse(accessToken)) {
                 setAuthState(AuthState.Failed);
+                return;
             }
-
             setAuthState(AuthState.Success);
         };
-        if (appState.api.token && appState.api.token.accessToken && !accessTokenExpired(appState.api.token.accessToken)) {
+        if (appState.api.accessToken && !accessTokenExpired(appState.api.accessToken)) {
             // Has non expired access token in state
             setAuthState(AuthState.Success);
             return;
         }
-
-        refreshToken();
-
-        setAuthState(AuthState.Failed);
+        if (!didMount) {
+            didMount = true;
+            refreshAccessToken();
+        }
     }, [authState]);
 
     if (authState == AuthState.Loading) {
@@ -51,6 +55,7 @@ const Authenticate = () => {
     }
 
     if (authState == AuthState.Failed) {
+        logout();
         return <Navigate to={NavigationConst.Login} />;
     }
 

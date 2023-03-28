@@ -1,35 +1,29 @@
 import { IErrorResponse, isErrorResponse } from "../Data/Types/API/ErrorResponse";
 
 import { useAtom } from "jotai";
+import { Authentication } from "../API/Authentication";
+import HttpClient from "../API/HttpClient";
 import { AppStateAtom } from "../State/AppState";
 import { accessTokenExpired } from "../Utils/Authentication";
-import { useRefresh } from "./useRefresh";
 
 export const useAuthentication = () => {
-    const [appState] = useAtom(AppStateAtom);
+    const [appState, setAppState] = useAtom(AppStateAtom);
 
-    const refreshAccessToken = useRefresh();
+    const getAccessToken = async (): Promise<string | IErrorResponse> => {
+        if (!appState.api.accessToken || accessTokenExpired(appState.api.accessToken)) {
+            const httpClient = new HttpClient({ baseURL: appState.api.baseUrl, withCredentials: true });
+            const response = await Authentication.refresh(httpClient);
 
-    const getClient = async (): Promise<string | IErrorResponse> => {
-        if (appState.api.token && appState.api.token.accessToken) {
-            if (accessTokenExpired(appState.api.token.accessToken)) {
-                const response = await refreshAccessToken();
-
-                if (isErrorResponse(response)) {
-                    return response;
-                }
-
-                return response.accessToken;
+            if (isErrorResponse(response)) {
+                return response;
             }
 
-            return appState.api.token.accessToken;
+            setAppState({ ...appState, api: { ...appState.api, accessToken: response } });
+            return response;
         }
 
-        return {
-            statusCode: 404,
-            message: "No access token found",
-        };
+        return appState.api.accessToken;
     };
 
-    return getClient;
+    return getAccessToken;
 };

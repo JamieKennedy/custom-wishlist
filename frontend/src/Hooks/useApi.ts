@@ -5,14 +5,14 @@ import { useAtom } from "jotai";
 import HttpClient from "../API/HttpClient";
 import { AppStateAtom } from "../State/AppState";
 import { accessTokenExpired } from "../Utils/Authentication";
+import { HttpClientUtils } from "../Utils/HttpClientUtils";
 import { useAuthentication } from "./useAuthentication";
-import { useRefresh } from "./useRefresh";
 
 type fn = <T>(...args: any[]) => Promise<T | IErrorResponse>;
 
 export const useApi = () => {
     const [appState] = useAtom(AppStateAtom);
-    const getClient = useAuthentication();
+    const getAccessToken = useAuthentication();
 
     const callApi = async <T, V>(
         fn: (httpClient: HttpClient, ...args: any[]) => Promise<T | IErrorResponse>,
@@ -22,23 +22,24 @@ export const useApi = () => {
         if (!appState.api.baseUrl) {
             // No base url in the state, shouldn't happen
             return {
-                statusCode: 404,
-                message: "No BaseUrl found",
-            };
+                StatusCode: 404,
+                Message: "No BaseUrl found",
+            } as IErrorResponse;
         }
 
-        // Initialise the request config
-        let requestConfig: AxiosRequestConfig = { baseURL: appState.api.baseUrl };
+        let accessToken: string | undefined;
 
         if (requiresAuth) {
-            const response = await getClient();
+            const response = await getAccessToken();
 
             if (isErrorResponse(response)) {
                 return response;
             }
 
-            requestConfig = { ...requestConfig, headers: { ...requestConfig.headers, Authorization: `Bearer ${response}` } };
+            accessToken = response;
         }
+
+        const requestConfig = HttpClientUtils.BuildHttpClientConfig(appState.api.baseUrl, accessToken);
 
         const httpClient = new HttpClient(requestConfig);
 
