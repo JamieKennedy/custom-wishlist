@@ -5,6 +5,7 @@ import { useState } from "react";
 import { IoPersonSharp } from "react-icons/io5";
 import { MdOutlineLogout } from "react-icons/md";
 import NavigationConst from "../../Constants/NavigationConst";
+import { useLogout } from "../../Hooks/useLogout";
 import { AppStateAtom } from "../../State/AppState";
 import DropDown from "./DropDown";
 import DropDownLinkItem from "./DropDownLinkItem";
@@ -16,17 +17,10 @@ const ProfileIcon = () => {
     const [dropDownHidden, setDropDownHidden] = useState(true);
 
     const navigate = useNavigate();
+    const logout = useLogout();
 
     const setDropDownVisibility = (hidden: boolean) => {
         setDropDownHidden(hidden);
-    };
-
-    const logOut = () => {
-        setAppState({
-            ...appState,
-            api: { ...appState.api, token: null },
-            user: null,
-        });
     };
 
     return (
@@ -36,7 +30,7 @@ const ProfileIcon = () => {
             </div>
             <DropDown hidden={dropDownHidden} visibilityFn={setDropDownVisibility}>
                 <DropDownLinkItem text='View profile' icon={<IoPersonSharp />} path={NavigationConst.Profile + appState.user?.id} />
-                <DropDownLinkItem text='Log out' icon={<MdOutlineLogout />} onClick={logOut} path={NavigationConst.Login} />
+                <DropDownLinkItem text='Log out' icon={<MdOutlineLogout />} onClick={logout} path={NavigationConst.Login} />
             </DropDown>
         </div>
     );

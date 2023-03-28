@@ -3,7 +3,6 @@ import Authenticate from "./Components/Authenticate";
 import NavigationConst from "./Constants/NavigationConst";
 import CreateAccount from "./Pages/CreateAccount/CreateAccount";
 import Home from "./Pages/Home/Home";
-import LoginForm from "./Pages/Login/Components/LoginForm";
 import Login from "./Pages/Login/Login";
 import Profile from "./Pages/Profile/Profile";
 

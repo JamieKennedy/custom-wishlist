@@ -1,20 +1,20 @@
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { IErrorResponse, isErrorResponse } from "../../../Data/Types/API/ErrorResponse";
-import { ILoginRequest, IToken } from "../../../Data/Types/API/Authentication";
 import { Navigate, useNavigate } from "react-router";
+import { ILoginRequest, IToken } from "../../../Data/Types/API/Authentication";
+import { IErrorResponse, isErrorResponse } from "../../../Data/Types/API/ErrorResponse";
 import { getPayload, isLoggedIn } from "../../../Utils/Authentication";
 
-import { AppStateAtom } from "../../../State/AppState";
-import FormErrorMessage from "../../../Components/UI/FormErrorMessage";
-import { FormState } from "../../../Data/Types/FormState";
-import FormSubmitButton from "../../../Components/UI/FormSubmitButton";
-import { Link } from "react-router-dom";
-import NavigationConst from "../../../Constants/NavigationConst";
-import { login } from "../../../API/Authentication";
-import { useApi } from "../../../Hooks/useApi";
 import { useAtom } from "jotai";
-import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import { Authentication } from "../../../API/Authentication";
+import FormErrorMessage from "../../../Components/UI/FormErrorMessage";
+import FormSubmitButton from "../../../Components/UI/FormSubmitButton";
+import NavigationConst from "../../../Constants/NavigationConst";
+import { FormState } from "../../../Data/Types/FormState";
+import { useApi } from "../../../Hooks/useApi";
+import { AppStateAtom } from "../../../State/AppState";
 
 interface ILoginFormData {
     email: string;
@@ -39,7 +39,7 @@ const LoginForm = () => {
     const onSubmit = async (data: ILoginFormData) => {
         setFormState(FormState.pending);
 
-        const response = await callApi(login, false, {
+        const response = await callApi(Authentication.login, false, {
             email: data.email,
             password: data.password,
         });
@@ -48,7 +48,7 @@ const LoginForm = () => {
             // Default to an error occured message
             let errorMessage = "An error has occured, please try again";
 
-            if (response.statusCode && response.statusCode === 401) {
+            if (response.StatusCode && response.StatusCode === 401) {
                 // if reponse is unauthorised, change error message to
                 // incorrect details
                 errorMessage = "Incorrect details";
@@ -58,10 +58,8 @@ const LoginForm = () => {
             setFormState(FormState.default);
             return;
         }
-        console.log(response);
 
-        appState.api.token = response as IToken;
-        setAppState(appState);
+        setAppState({ ...appState, api: { ...appState.api, accessToken: response } });
         setFormState(FormState.default);
 
         navigate(NavigationConst.Home);

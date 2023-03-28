@@ -9,6 +9,7 @@ import NavigationConst from "../../Constants/NavigationConst";
 import { isErrorResponse } from "../../Data/Types/API/ErrorResponse";
 import { PageState } from "../../Data/Types/PageState";
 import { useApi } from "../../Hooks/useApi";
+import { useAuthentication } from "../../Hooks/useAuthentication";
 import { AppStateAtom } from "../../State/AppState";
 import { getPayload } from "../../Utils/Authentication";
 
@@ -17,17 +18,20 @@ const Home: FunctionComponent = () => {
     const [pageState, setPageState] = useState<PageState>(PageState.Loading);
 
     const callApi = useApi();
+    const getAccessToken = useAuthentication();
+
+    let isMounted = false;
 
     useEffect(() => {
-        if (!appState.api.token || !appState.api.token.accessToken || !appState.api.token.refreshToken) {
-            setPageState(PageState.AuthError);
-            return;
-        }
-        console.log(!appState.api.token || !appState.api.token.accessToken || !appState.api.token.refreshToken);
-
-        const payLoad = getPayload(appState.api.token!.accessToken);
-
         const fetchUser = async () => {
+            const accessToken = await getAccessToken();
+
+            if (isErrorResponse(accessToken)) {
+                setPageState(PageState.AuthError);
+                return;
+            }
+
+            const payLoad = getPayload(accessToken);
             const response = await callApi(getUser, true, payLoad.Id);
 
             if (!isErrorResponse(response)) {
@@ -39,8 +43,11 @@ const Home: FunctionComponent = () => {
             setPageState(PageState.AuthError);
         };
 
-        fetchUser();
-    }, []);
+        if (!isMounted) {
+            isMounted = true;
+            fetchUser();
+        }
+    }, [pageState]);
 
     if (pageState === PageState.AuthError) {
         return <Navigate to={NavigationConst.Login} />;
