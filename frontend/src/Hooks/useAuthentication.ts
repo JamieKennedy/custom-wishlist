@@ -10,7 +10,7 @@ export const useAuthentication = () => {
 
     const refreshAccessToken = useRefresh();
 
-    const getClient = async (): Promise<string | IErrorResponse> => {
+    const getAccessToken = async (): Promise<string | IErrorResponse> => {
         if (appState.api.token && appState.api.token.accessToken) {
             if (accessTokenExpired(appState.api.token.accessToken)) {
                 const response = await refreshAccessToken();
@@ -31,5 +31,5 @@ export const useAuthentication = () => {
         };
     };
 
-    return getClient;
+    return getAccessToken;
 };

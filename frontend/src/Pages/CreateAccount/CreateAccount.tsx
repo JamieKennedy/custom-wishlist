@@ -1,17 +1,16 @@
 import Header from "../../Components/PageElements/Header";
-import LoginForm from "./Components/LoginForm";
 
-const Login = (): JSX.Element => {
+const CreateAccount = () => {
     return (
         <>
             <Header />
             <div className='flex w-full'>
                 <div className='m-auto h-fit w-[35rem] rounded-3xl bg-white bg-opacity-5 backdrop-blur-md'>
-                    <LoginForm />
+                    <div className='h-96'></div>
                 </div>
             </div>
         </>
     );
 };
 
-export default Login;
+export default CreateAccount;

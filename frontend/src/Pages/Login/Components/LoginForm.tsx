@@ -1,19 +1,20 @@
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Navigate, useNavigate } from "react-router";
-import { ILoginRequest, IToken } from "../../../Data/Types/API/Authentication";
 import { IErrorResponse, isErrorResponse } from "../../../Data/Types/API/ErrorResponse";
+import { ILoginRequest, IToken } from "../../../Data/Types/API/Authentication";
+import { Navigate, useNavigate } from "react-router";
 import { getPayload, isLoggedIn } from "../../../Utils/Authentication";
 
-import { useAtom } from "jotai";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { login } from "../../../API/Authentication";
-import FormErrorMessage from "../../../Components/UI/FormErrorMessage";
-import FormSubmitButton from "../../../Components/UI/FormSubmitButton";
-import NavigationConst from "../../../Constants/NavigationConst";
-import { FormState } from "../../../Data/Types/FormState";
-import { useApi } from "../../../Hooks/useApi";
 import { AppStateAtom } from "../../../State/AppState";
+import FormErrorMessage from "../../../Components/UI/FormErrorMessage";
+import { FormState } from "../../../Data/Types/FormState";
+import FormSubmitButton from "../../../Components/UI/FormSubmitButton";
+import { Link } from "react-router-dom";
+import NavigationConst from "../../../Constants/NavigationConst";
+import { login } from "../../../API/Authentication";
+import { useApi } from "../../../Hooks/useApi";
+import { useAtom } from "jotai";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
 
 interface ILoginFormData {
     email: string;
@@ -57,6 +58,7 @@ const LoginForm = () => {
             setFormState(FormState.default);
             return;
         }
+        console.log(response);
 
         appState.api.token = response as IToken;
         setAppState(appState);
@@ -122,7 +124,10 @@ const LoginForm = () => {
                         </div>
                     )}
                     <p className='cursor-pointer text-center text-white'>
-                        <a className='hover:underline'>Create an account</a> | <a className='hover:underline'>Forgotten password</a>
+                        <Link className='hover:underline' to={NavigationConst.CreateAccount}>
+                            Create an account
+                        </Link>{" "}
+                        | <a className='hover:underline'>Forgotten password</a>
                     </p>
                 </div>
             </form>

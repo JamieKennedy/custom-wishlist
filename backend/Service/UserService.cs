@@ -34,5 +34,17 @@ namespace Service
 
             return _mapper.Map<UserDto>(user);
         }
+
+        public async Task<UserDto> GetUserById(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                throw new NotFoundException("User not found");
+            }
+
+            return _mapper.Map<UserDto>(user);
+        }
     }
 }
